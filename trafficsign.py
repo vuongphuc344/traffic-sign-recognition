@@ -32,17 +32,22 @@ def main():
     model = get_model()
 
     # Fit model on training data
-    model.fit(x_train, y_train, epochs=EPOCHS)
-
+    history = model.fit(x_train, y_train,epochs=EPOCHS,validation_data=(x_test, y_test))
+      
     # Evaluate neural network performance
-    model.evaluate(x_test,  y_test, verbose=2)
+    model.evaluate(x_test, y_test, verbose=2)
 
+    # Ve do thi
+    plot_history(history)
+    
     # Save model to file
     if len(sys.argv) == 3:
         filename = sys.argv[2]
         model.save(filename)
         print(f"Model saved to {filename}.")
 
+    # Nhan dien anh thuc te 
+    predict_real_image(model)
 
 def load_data(data_dir):
     """
