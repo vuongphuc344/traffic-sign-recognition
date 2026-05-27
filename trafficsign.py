@@ -81,12 +81,20 @@ def load_data(data_dir):
             images_in_subfolder.append(image)
 
         # Open each image 
-        
+        for image in images_in_subfolder:
+            image_path = os.path.join(sub_folder, image)
+            
+            #Doc anh bang OpenCV
+            img = cv2.imread(image_path)
+            if img is None:
+                continue
+            
             # Add Label
+            labels.append(sub)
             
-
             # Resize and Add Image
-            
+            img = cv2.resize(img, (IMG_WIDTH, IMG_HEIGHT))
+            images.append(img)
             
             # print(image_path)
             
