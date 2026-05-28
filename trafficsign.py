@@ -1,17 +1,10 @@
-from cv2 import cv2
-import numpy as np
-import os
-import sys
-import tensorflow as tf
-
+import sys, numpy as np, tensorflow as tf
 from sklearn.model_selection import train_test_split
 
-EPOCHS = 10
-IMG_WIDTH = 30
-IMG_HEIGHT = 30
-NUM_CATEGORIES = 43
-TEST_SIZE = 0.4
-
+from config  import TEST_SIZE, EPOCHS
+from dataset import load_data
+from model   import get_model
+from utils   import plot_history, predict_real_image
 
 def main():
 
@@ -48,105 +41,6 @@ def main():
 
     # Nhan dien anh thuc te 
     predict_real_image(model)
-
-def load_data(data_dir):
-    """
-    Load image data from directory `data_dir`.
-
-    Assume `data_dir` has one directory named after each category, numbered
-    0 through NUM_CATEGORIES - 1. Inside each category directory will be some
-    number of image files.
-
-    Return tuple `(images, labels)`. `images` should be a list of all
-    of the images in the data directory, where each image is formatted as a
-    numpy ndarray with dimensions IMG_WIDTH x IMG_HEIGHT x 3. `labels` should
-    be a list of integer labels, representing the categories for each of the
-    corresponding `images`.
-    """
-
-    images = []
-    labels = []
-
-    # Path to data folder
-    data_path = os.path.join(data_dir)
-
-    # Number of subdirectories/labels
-    number_of_labels = 0
-    
-    for i in os.listdir(data_path):
-        number_of_labels += 1
-
-    # Loop through the subdirectories
-    for sub in range(number_of_labels):
-        sub_folder = os.path.join(data_path, str(sub))
-
-        images_in_subfolder = []
-
-        for image in os.listdir(sub_folder):
-            images_in_subfolder.append(image)
-
-        # Open each image 
-        for image in images_in_subfolder:
-            image_path = os.path.join(sub_folder, image)
-            
-            #Doc anh bang OpenCV
-            img = cv2.imread(image_path)
-            if img is None:
-                continue
-            
-            # Add Label
-            labels.append(sub)
-            
-            # Resize and Add Image
-            img = cv2.resize(img, (IMG_WIDTH, IMG_HEIGHT))
-            images.append(img)
-            
-            # print(image_path)
-            
-    return (images, labels)
-
-
-def get_model():
-    """
-    Returns a compiled convolutional neural network model. Assume that the
-    `input_shape` of the first layer is `(IMG_WIDTH, IMG_HEIGHT, 3)`.
-    The output layer should have `NUM_CATEGORIES` units, one for each category.
-    """
-
-    model = tf.keras.models.Sequential([
-
-        # Convolutional layers and Max-pooling layers
-        tf.keras.layers.Conv2D(32, (3,3), activation="relu",input_shape=(IMG_WIDTH, IMG_HEIGHT, 3)),
-        tf.keras.layers.Conv2D(32, (3,3), activation="relu"),
-        tf.keras.layers.MaxPooling2D(pool_size=(2, 2)),
-
-        tf.keras.layers.Conv2D(64, (3,3), activation="relu", padding="same"),
-        tf.keras.layers.Conv2D(64, (3,3), activation="relu", padding="same"),
-        tf.keras.layers.MaxPooling2D(pool_size=(2, 2)),
-
-        # Flatten units
-        tf.keras.layers.Flatten(),
-
-        # Hidden Layers
-        tf.keras.layers.Dense(256, activation="relu"),
-        tf.keras.layers.Dense(128, activation="relu"),
-        
-        # Dropout
-        tf.keras.layers.Dropout(0.5),
-              
-        # Output layer with output units for all digits
-        tf.keras.layers.Dense(NUM_CATEGORIES, activation="softmax")
-        
-    ])
-
-    model.compile(
-        optimizer="adam",
-        loss="categorical_crossentropy",
-        metrics=["accuracy"]
-    )
-    
-    return model
-
 
 if __name__ == "__main__":
     main()
