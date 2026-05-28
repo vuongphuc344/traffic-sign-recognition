@@ -1,4 +1,7 @@
-import cv2, numpy as np, matplotlib.pyplot as plt
+import os          # ← thêm dòng này
+import cv2
+import numpy as np
+import matplotlib.pyplot as plt
 from config import EPOCHS, IMG_WIDTH, IMG_HEIGHT, SIGN_NAMES
 
 def plot_history(history):
