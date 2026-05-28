@@ -12,6 +12,13 @@ def main():
     if len(sys.argv) not in [2, 3]:
         sys.exit("Usage: python traffic.py data_directory [model.h5]")
 
+    # Nếu truyền vào file .h5 có sẵn → load luôn, không train
+    if len(sys.argv) == 3 and sys.argv[2].endswith(".h5") and os.path.exists(sys.argv[2]):
+        print(f"Tim thay model: {sys.argv[2]} → Bo qua train, load model...")
+        model = tf.keras.models.load_model(sys.argv[2])
+        predict_real_image(model)
+        return
+    
     # Get image arrays and labels for all image files
     images, labels = load_data(sys.argv[1])
 
