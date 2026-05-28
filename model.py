@@ -41,36 +41,3 @@ def get_model():
     )
     
     return model
-
-def plot_history(history):
-    """Ve do thi Accuracy va Loss theo epoch"""
-    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 5))
-    fig.suptitle("Traffic Sign Recognition - Training Results",
-                 fontsize=14, fontweight="bold")
-    epochs_range = range(1, EPOCHS + 1)
-
-    ax1.plot(epochs_range, history.history["accuracy"],
-             "b-o", label="Train Accuracy", linewidth=2)
-    ax1.plot(epochs_range, history.history["val_accuracy"],
-             "r-o", label="Val Accuracy", linewidth=2)
-    ax1.set_title("Model Accuracy")
-    ax1.set_xlabel("Epoch")
-    ax1.set_ylabel("Accuracy")
-    ax1.legend()
-    ax1.grid(True, alpha=0.3)
-    ax1.set_ylim([0, 1])
-
-    ax2.plot(epochs_range, history.history["loss"],
-             "b-o", label="Train Loss", linewidth=2)
-    ax2.plot(epochs_range, history.history["val_loss"],
-             "r-o", label="Val Loss", linewidth=2)
-    ax2.set_title("Model Loss")
-    ax2.set_xlabel("Epoch")
-    ax2.set_ylabel("Loss")
-    ax2.legend()
-    ax2.grid(True, alpha=0.3)
-
-    plt.tight_layout()
-    plt.savefig("training_results.png", dpi=150, bbox_inches="tight")
-    print("Da luu do thi: training_results.png")
-    plt.show()
