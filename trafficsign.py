@@ -1,10 +1,9 @@
-import sys, numpy as np, tensorflow as tf
-from sklearn.model_selection import train_test_split
-
-from config  import TEST_SIZE, EPOCHS
-from dataset import load_data
-from model   import get_model
-from utils   import plot_history, predict_real_image
+import sys
+import numpy as np
+import tensorflow as tf
+import cv2
+import os
+from utils import predict_real_image
 
 def main():
 
